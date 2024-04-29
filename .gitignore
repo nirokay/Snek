@@ -1,0 +1,24 @@
+# Binaries:
+*
+!*/
+!*.*
+*.exe
+*.out
+./bin/*
+./out/*
+
+# Docs:
+docs/
+
+# Private:
+private/
+local/
+
+# Common dotless files:
+!LICENSE
+!README
+!CHANGELOG
+!CHANGES
+!FIXES
+!FIXME
+!TODO
