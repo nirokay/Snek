@@ -1,6 +1,6 @@
 import std/[strutils]
 import raylib
-import properties, globals, gamestate, colours, assets
+import properties, globals, gamestate, colours, scores, utils
 
 var
     arena: Arena
@@ -13,6 +13,7 @@ proc gameInit() =
     snake = Snake()
 
     arena.isRunning = true
+    playerScore = 0
     arena.spawnRandomFruit(snake)
 
 proc gameUpdate() =
@@ -38,13 +39,18 @@ proc gameRender() =
     ## Renders a frame
     beginDrawing()
     clearBackground(colourBackground)
-    block `Draw arena`:
+    block blockRenderArena:
         drawArena arena.withSnake(snake)
 
     block blockRenderGameOver:
         if arena.isRunning:
             break blockRenderGameOver
-        drawText(cstring "Game over :(", 0, 0, 32, RayWhite)
+        drawTextCentered(cstring "Game over :(", screenWidth div 2, 420 #[nice]#, fontSizeHuge, RayWhite)
+        drawTextCentered(cstring "Press [Escape] to restart", screenWidth div 2, 600, fontSizeLarge, RayWhite)
+
+    block blockRenderUI:
+        drawTextCentered(cstring "Score: " & $playerScore, screenWidth div 4, 25, fontSizeScoreBoard, RayWhite)
+        drawTextCentered(cstring "Highscore: " & $playerHighScore, screenWidth div 4 + screenWidth div 2, 25, fontSizeScoreBoard, RayWhite)
     endDrawing()
 
 proc gameUnload() =
@@ -58,8 +64,13 @@ proc gameUpdateRender() =
 
 proc main() =
     ## Main proc with loop and error handling
-    initWindow(screenWidth, screenHeight, gameName & " v" & gameVersion & " by " & gameAuthors.join(", "))
+    # Raylib stuff:
+    initWindow(screenWidth, screenHeight, gameName & " v" & gameVersion)
     setExitKey(Delete)
+
+    # Custom stuff:
+    initSaveDirectory()
+    readHighScoreFromFile()
 
     # Game loop:
     try:

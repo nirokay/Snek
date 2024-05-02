@@ -104,6 +104,10 @@ proc nextSnakePosition*(snake: Snake): TilePosition =
     echo snake.tiles
     return TilePosition(x: x, y: y)
 
+proc onGameOver*(snake: var Snake, arena: var Arena) =
+    updatePlayerHighscore()
+    arena.isRunning = false
+
 proc updateMovementIn*(snake: var Snake, arena: var Arena) =
     ## Updates the whole snake position in the arena
     if snake.direction == dirNone: return
@@ -114,7 +118,7 @@ proc updateMovementIn*(snake: var Snake, arena: var Arena) =
 
     # Lose condition:
     if next in snake.tiles:
-        arena.isRunning = false
+        onGameOver(snake, arena)
 
     snake.tiles.insert(next, 0)
 

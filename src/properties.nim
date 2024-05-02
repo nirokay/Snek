@@ -43,3 +43,9 @@ const
         KeyboardKey.L,     # Vim controls
         KeyboardKey.Kp4    # Numpad
     ]
+
+const
+    fontSizeHuge*: int32 = 128
+    fontSizeLarge*: int32 = 64
+    fontSizeMedium*: int32 = 32
+    fontSizeScoreBoard*: int32 = 48
