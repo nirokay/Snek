@@ -1,9 +1,39 @@
+import properties
+import raylib
+
 var
-    frameCount*: uint
-    lastUpdate*: uint
+    frameCounter*: uint ## Frame counter since the game launch
+    lastUpdate*: uint ## Last update (frame counter)
+    turnsPerSecond*: uint = 2 ## Amount of snake moves per turn ~= difficulty
+
+    playerScore*: uint = 0 ## Current player score
+    playerScoreIncrement*: uint = 2 ## Amount of score to increment on nom nom of fruit
+    playerHighscore*: uint = 0 ## Player highscore (set at game fail and game init from file)
+
+    playerAlive*: bool = false ## Global flag if player is alive or dead
 
 proc updateFrameCount*() =
     ## Increments the frame counter and updates the FPS
-    if unlikely frameCount >= uint.high():
-        frameCount = uint.low()
-    frameCount.inc()
+    if unlikely frameCounter >= uint.high():
+        frameCounter = uint.low()
+    frameCounter.inc()
+
+proc allowSnakeMove*(): bool =
+    ## Determines if the snake is allowed to make a move or not
+    result = frameCounter - lastUpdate > uint(uint(getFPS()) div turnsPerSecond)
+    if result: lastUpdate = frameCounter
+
+proc handlePlayerSpeedDifficulty*() =
+    ## Updates `turnsPerSecond` when a specific point is reached and increases the player rewards
+    var changed: bool = false
+
+    #! TODO handle formula for speed increase
+
+    if likely(not changed): return
+    turnsPerSecond.inc()
+    playerScoreIncrement = (initialPlayerScoreIncrement + turnsPerSecond) * turnsPerSecond
+
+
+
+
+

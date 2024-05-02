@@ -1,25 +1,50 @@
-import std/[strutils, segfaults]
+import std/[strutils]
 import raylib
-import properties, globals, gamestate
+import properties, globals, gamestate, colours, assets
 
 var
     arena: Arena
-    player: Snake
+    snake: Snake
 
 
 proc gameInit() =
     ## Initializes game and assets (there are none lol)
+    arena = Arena()
+    snake = Snake()
+
+    arena.isRunning = true
+    arena.spawnRandomFruit(snake)
 
 proc gameUpdate() =
     ## Updates game logic
-    let fps = getFPS()
+    updateFrameCount()
+    # stdout.write "\nFPS: " & $getFPS() & " | Last update: " & $lastUpdate & " | Frame-count: " & $frameCounter & "               "
+
+    # Reset:
+    if isKeyReleased(Escape): gameInit()
+
+    if not arena.isRunning: return
+
+    # Read snake controls:
+    snake.controls()
+
+    # Only called when movement allowed:
+    if not allowSnakeMove(): return
+    handlePlayerSpeedDifficulty()
+
+    arena.update(snake)
 
 proc gameRender() =
     ## Renders a frame
     beginDrawing()
-    clearBackground(Color(r: 0, g: 0, b: 0))
-    block allDrawingCalls:
-        drawCircle(screenWidth div 2, screenHeight div 2, 50, RayWhite)
+    clearBackground(colourBackground)
+    block `Draw arena`:
+        drawArena arena.withSnake(snake)
+
+    block blockRenderGameOver:
+        if arena.isRunning:
+            break blockRenderGameOver
+        drawText(cstring "Game over :(", 0, 0, 32, RayWhite)
     endDrawing()
 
 proc gameUnload() =
@@ -34,6 +59,7 @@ proc gameUpdateRender() =
 proc main() =
     ## Main proc with loop and error handling
     initWindow(screenWidth, screenHeight, gameName & " v" & gameVersion & " by " & gameAuthors.join(", "))
+    setExitKey(Delete)
 
     # Game loop:
     try:
@@ -47,10 +73,10 @@ proc main() =
         gameUnload()
 
     # Error "handling":
-    except CatchableError as e:
-        echo "Error panic: " & $e.name & "\n" & e.msg
-    except Defect as e:
-        echo "Defect panic: " & $e.name & "\n" & e.msg
+    #except CatchableError as e:
+    #    echo "Error panic: " & $e.name & "\n" & e.msg
+    #except Defect as e:
+    #    echo "Defect panic: " & $e.name & "\n" & e.msg
 
     # Close window:
     finally:
