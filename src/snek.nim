@@ -1,6 +1,5 @@
-import std/[strutils]
 import raylib
-import properties, globals, gamestate, colours, scores, utils
+import properties, globals, gamestate, palette, scores, utils
 
 var
     arena: Arena
@@ -38,15 +37,15 @@ proc gameUpdate() =
 proc gameRender() =
     ## Renders a frame
     beginDrawing()
-    clearBackground(colourBackground)
+    clearBackground(colour(colBgBlack))
     block blockRenderArena:
         drawArena arena.withSnake(snake)
 
     block blockRenderGameOver:
         if arena.isRunning:
             break blockRenderGameOver
-        drawTextCentered(cstring "Game over :(", screenWidth div 2, 420 #[nice]#, fontSizeHuge, RayWhite)
-        drawTextCentered(cstring "Press [Escape] to restart", screenWidth div 2, 600, fontSizeLarge, RayWhite)
+        drawTextCentered(cstring "Game over :(", screenWidth div 2, 420 #[nice]#, fontSizeLarge, RayWhite)
+        drawTextCentered(cstring "Press [Escape] to restart", screenWidth div 2, 600, fontSizeMedium, RayWhite)
 
     block blockRenderUI:
         drawTextCentered(cstring "Score: " & $playerScore, screenWidth div 4, 25, fontSizeScoreBoard, RayWhite)

@@ -1,11 +1,12 @@
 import std/[random]
 import raylib
-import properties, colours, scores
+import properties, palette, scores, tiles
 const
     pixelSize*: int = playFieldWidth ## Playing area width and height in pixels
     gridSize*: int = 64 ## Width and height of a single tile in pixels
     gridOffset*: int = screenHeight - playFieldHeight ## Offset of the playing area from the top
     tileOnAxis*: int = pixelSize div gridSize ## Amount of tiles on a single axis
+
 
 
 # =============================================================================
@@ -126,7 +127,7 @@ proc getNextDirection(snake: Snake): SnakeDirection =
     var nextDirection: SnakeDirection = snake.direction
     proc keyboard[V](dir: SnakeDirection, buttons: array[V, KeyboardKey]) =
         for button in buttons:
-            if isKeyDown(button) or isKeyPressed(button): nextDirection = dir
+            if isKeyDown(button) or isKeyPressed(button) or isKeyPressedRepeat(button) or isKeyReleased(button): nextDirection = dir
     keyboard(dirUp, playerControlsUp)
     keyboard(dirDown, playerControlsDown)
     keyboard(dirLeft, playerControlsLeft)
@@ -167,34 +168,18 @@ proc toPixelArea*(position: TilePosition): PixelArea =
     result.x2 = result.x1 + gridSize
     result.y2 = result.y1 + gridSize
 
-proc drawTile(tile: Tile, position: TilePosition) =
+proc drawArenaTile(tile: Tile, position: TilePosition) =
     let pixelArea: PixelArea = position.toPixelArea()
-    case tile:
-    of tileBackground:
-        drawRectangle(
-            int32 pixelArea.x1, int32 pixelArea.y1,
-            int32 gridSize, int32 gridSize,
-            colourBackgroundTile
-            # Color(r: byte rand(255), g: byte rand(255), b: byte rand(255), a: 255) # seizure warning (trust me its funny)
-        )
-    of tileSnakeBody:
-        drawRectangle(
-            int32 pixelArea.x1 + 1, int32 pixelArea.y1 + 1,
-            int32 gridSize - 2, int32 gridSize - 2,
-            colourSnake
-        )
-    of tileSnakeHead:
-        drawRectangle(
-            int32 pixelArea.x1, int32 pixelArea.y1,
-            int32 gridSize, int32 gridSize,
-            colourSnake
-        )
-    of tileFruit:
-        drawRectangle(
-            int32 pixelArea.x1 + 2, int32 pixelArea.y1 + 2,
-            int32 gridSize - 4, int32 gridSize - 4,
-            colourFruit
-        )
+    drawTile gridSize, pixelArea.x1, pixelArea.y1:
+        case tile:
+        of tileBackground:
+            textureBackground
+        of tileSnakeBody:
+            textureSnakeBody
+        of tileSnakeHead:
+            textureSnakeHead
+        of tileFruit:
+            textureFruit
 
 proc drawArena*(arena: Arena) =
     ## Draws the entire arena to the screen
@@ -202,6 +187,6 @@ proc drawArena*(arena: Arena) =
     arena.tiles[arena.food.x][arena.food.y] = tileFruit
     for rowId, row in arena.tiles:
         for colId, tile in row:
-            drawTile(tile, TilePosition(
+            drawArenaTile(tile, TilePosition(
                 x: rowId, y: colId
             ))

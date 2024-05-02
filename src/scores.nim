@@ -1,6 +1,5 @@
 import std/[os, strutils]
-import raylib
-import globals, properties
+import globals
 
 let
     saveDirectory*: string = getDataDir() & "/nirokay/snek/"
@@ -12,7 +11,7 @@ proc readHighScoreFromFile*() =
         highscore: int = 0
     try:
         rawContent = saveFileHighscore.readFile().strip()
-    except OSError:
+    except IOError:
         echo "Could not open save file"
     try:
         highscore = rawContent.parseInt()
@@ -41,5 +40,5 @@ proc writeHighscoreToFile*() =
 proc updatePlayerHighscore*() =
     try:
         writeHighscoreToFile()
-    except CatchableError as e:
+    except IOError as e:
         echo "Failed to save highscore: " & $e.name & "\n" & e.msg

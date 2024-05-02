@@ -1,9 +1,18 @@
 import raylib
 
+# =============================================================================
+# Game information:
+# =============================================================================
+
 const
     gameName*: string = "Snek"
     gameVersion*: string = "0.1.0"
     gameAuthors*: seq[string] = @["nirokay"]
+
+
+# =============================================================================
+# Window/Layout and Raylib information:
+# =============================================================================
 
 const
     playFieldWidth*: int32 = 1024
@@ -17,6 +26,11 @@ const
     targetFPS*: int32 = 60
 
     initialPlayerScoreIncrement*: uint = 2
+
+
+# =============================================================================
+# Controls:
+# =============================================================================
 
 const
     playerControlsUp* = [
@@ -44,8 +58,13 @@ const
         KeyboardKey.Kp4    # Numpad
     ]
 
+
+# =============================================================================
+# Fonts:
+# =============================================================================
+
 const
-    fontSizeHuge*: int32 = 128
-    fontSizeLarge*: int32 = 64
-    fontSizeMedium*: int32 = 32
+    fontSizeLarge*: int32 = 128
+    fontSizeMedium*: int32 = 64
+    fontSizeTiny*: int32 = 32
     fontSizeScoreBoard*: int32 = 48
