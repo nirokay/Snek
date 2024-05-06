@@ -1,3 +1,4 @@
+import std/[os]
 import raylib
 
 # =============================================================================
@@ -25,6 +26,14 @@ const
 
     targetFPS*: int32 = 60
 
+
+# =============================================================================
+# Files:
+# =============================================================================
+
+const
+    saveDirectory*: string = getDataDir() & "/nirokay/snek/"
+    saveFileHighscore*: string = saveDirectory & "highscore.dat"
 
 # =============================================================================
 # Controls:
@@ -66,3 +75,22 @@ const
     fontSizeMedium*: int32 = 64
     fontSizeTiny*: int32 = 32
     fontSizeScoreBoard*: int32 = 48
+
+
+# =============================================================================
+# Images:
+# =============================================================================
+
+const imageRawIcon: string = readFile("assets/icon.png")
+let imageWindowIconLocation: string = saveDirectory & "icon.png"
+
+if not imageWindowIconLocation.fileExists():
+    imageWindowIconLocation.writeFile(imageRawIcon)
+
+let imageWindowIcon*: Image = block:
+    var result: Image = Image()
+    try:
+        result = loadImage(imageWindowIconLocation)
+    except CatchableError:
+        echo "Failed to load window icon..."
+    result

@@ -65,6 +65,7 @@ proc main() =
     ## Main proc with loop and error handling
     # Raylib stuff:
     initWindow(screenWidth, screenHeight, gameName & " v" & gameVersion)
+    setWindowIcon(imageWindowIcon)
     setExitKey(Delete)
 
     # Custom stuff:

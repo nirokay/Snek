@@ -1,9 +1,5 @@
 import std/[os, strutils]
-import globals
-
-let
-    saveDirectory*: string = getDataDir() & "/nirokay/snek/"
-    saveFileHighscore*: string = saveDirectory & "highscore.dat"
+import globals, properties
 
 proc readHighScoreFromFile*() =
     var
