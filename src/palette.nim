@@ -7,25 +7,43 @@ type
         colBgBlack = 0,
         colBgGrey,
         colBgGreen,
+        colBgDarkGreen,
+        colBgLightGreen,
         colBgBrown,
         colBgRed,
+        colBgPink,
         # Foreground:
         colFgBlack = 16,
         colFgGrey,
         colFgGreen,
+        colFgDarkGreen,
+        colFgLightGreen
         colFgBrown,
-        colFgRed
+        colFgRed,
+        colFgPink,
+
+proc rgba*(r, g, b, a: byte): Color =
+    ## Shortcut for `Color(r: r, g: g, b: b, a: a)`
+    result = Color(
+        r: r,
+        g: g,
+        b: b,
+        a: a
+    )
+proc rgb*(r, g, b: byte): Color =
+    ## Shortcut for `Color(r: r, g: g, b: b, 255)`
+    result = rgba(r, g, b, 255)
 
 
 const colourPalette*: ColourPalette = [
-    Color(r: 10, g: 10, b: 10, a: 255),
-    Color(r: 20, g: 20, b: 20, a: 255),
-    Color(r: 10, g: 255, b: 10, a: 255),
-    Color(r: 150, g: 20, b: 20, a: 255),
-    Color(r: 200, g: 10, b: 10, a: 255),
-    Color(),
-    Color(),
-    Color(),
+    rgb(10, 10, 10), # Black
+    rgb(20, 20, 20), # Grey
+    rgb(136, 227, 38), # Green
+    rgb(112, 176, 39), # Dark Green
+    rgb(169, 237, 92), # Light Green
+    rgb(117, 74, 61), # Brown
+    rgb(212, 10, 10), # Red
+    rgb(230, 69 #[nice!]#, 98), # Pink
     Color(),
     Color(),
     Color(),
@@ -38,4 +56,4 @@ const colourPalette*: ColourPalette = [
 
 proc colour*(id: ColourPaletteId): Color =
     ## Gets a colour from the colour palette
-    result = colourPalette[int id]
+    result = colourPalette[int(id) mod 16]

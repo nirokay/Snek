@@ -1,6 +1,6 @@
 import std/[random]
 import raylib
-import properties, palette, scores, tiles
+import properties, scores, tiles
 const
     pixelSize*: int = playFieldWidth ## Playing area width and height in pixels
     gridSize*: int = 64 ## Width and height of a single tile in pixels
@@ -37,7 +37,7 @@ type
         ]
         onGraceFrame*, graceFrameAllowed*: bool
         direction*, nextDirection*: SnakeDirection = dirNone
-        queuedInputs*: seq[SnakeDirection]
+
 
 proc withSnake*(arena: Arena, snake: Snake): Arena =
     ## Arena with snake inside it (used for rendering)
@@ -102,7 +102,6 @@ proc nextSnakePosition*(snake: Snake): TilePosition =
     x = (x + base * 2) mod TileNumberRange.high
     y = (y + base * 2) mod TileNumberRange.high
 
-    echo snake.tiles
     return TilePosition(x: x, y: y)
 
 proc onGameOver*(snake: var Snake, arena: var Arena) =
@@ -112,10 +111,16 @@ proc onGameOver*(snake: var Snake, arena: var Arena) =
 proc updateMovementIn*(snake: var Snake, arena: var Arena) =
     ## Updates the whole snake position in the arena
     if snake.direction == dirNone: return
-    let
-        next: TilePosition = snake.nextSnakePosition()
-        tail: TilePosition = snake.tiles.pop()
-    discard tail
+    let next: TilePosition = snake.nextSnakePosition()
+
+    if likely(not snake.onGraceFrame):
+        if unlikely next in snake.tiles:
+            snake.onGraceFrame = true
+            return
+    else:
+        snake.onGraceFrame = false
+
+    discard snake.tiles.pop()
 
     # Lose condition:
     if next in snake.tiles:
@@ -145,9 +150,6 @@ proc controls*(snake: var Snake) =
         of dirLeft: dirRight
         of dirRight: dirLeft
     )
-
-    if nextDirection != snake.direction:
-        echo allowUpdate, "  ", snake.direction, "  ", nextDirection
 
     if allowUpdate: snake.nextDirection = nextDirection
 

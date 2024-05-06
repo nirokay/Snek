@@ -30,8 +30,8 @@ proc gameUpdate() =
 
     # Only called when movement allowed:
     if not allowSnakeMove(): return
-    handlePlayerSpeedDifficulty()
 
+    handlePlayerSpeedDifficulty()
     arena.update(snake)
 
 proc gameRender() =

@@ -1,4 +1,3 @@
-import properties
 import raylib
 
 var
@@ -24,16 +23,9 @@ proc allowSnakeMove*(): bool =
     if result: lastUpdate = frameCounter
 
 proc handlePlayerSpeedDifficulty*() =
-    ## Updates `turnsPerSecond` when a specific point is reached and increases the player rewards
-    var changed: bool = false
-
-    #! TODO handle formula for speed increase
-
-    if likely(not changed): return
-    turnsPerSecond.inc()
-    playerScoreIncrement = (initialPlayerScoreIncrement + turnsPerSecond) * turnsPerSecond
-
-
+    ## Updates `turnsPerSecond` based on score
+    let speed: uint = playerScore div 40 + 2
+    turnsPerSecond = speed
 
 
 

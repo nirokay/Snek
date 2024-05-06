@@ -25,8 +25,6 @@ const
 
     targetFPS*: int32 = 60
 
-    initialPlayerScoreIncrement*: uint = 2
-
 
 # =============================================================================
 # Controls:
