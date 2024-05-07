@@ -1,13 +1,13 @@
-import std/[random]
+import std/[random, algorithm]
 import raylib
 import properties, scores, tiles
 const
     pixelSize*: int = playFieldWidth ## Playing area width and height in pixels
-    gridSize*: int = 64 ## Width and height of a single tile in pixels
+    gridSize* {.intdefine.}: int = 48 ## Width and height of a single tile in pixels
     gridOffset*: int = screenHeight - playFieldHeight ## Offset of the playing area from the top
     tileOnAxis*: int = pixelSize div gridSize ## Amount of tiles on a single axis
-
-
+    spaceOnSides*: int = screenWidth - tileOnAxis * gridSize ## Empty space on left, right side and bottom
+    spaceOnSide*: int = spaceOnSides div 2 ## Empty space on one side
 
 # =============================================================================
 # Game logic:
@@ -15,12 +15,14 @@ const
 
 type
     Tile = enum
-        ## Tiles
+        ## Enum of all tiles in the game
         tileBackground, tileSnakeHead, tileSnakeBody, tileFruit
-    TileNumberRange = 0 .. tileOnAxis
+    TileNumberRange = 0 .. tileOnAxis ## Range of axis tiles
     TilePosition = object
+        ## `x` and `y` for a tile in its bounding axises
         x*, y*: TileNumberRange
     PixelArea = object
+        ## Cutout of the screen for the game area
         x1*, y1*, x2*, y2*: int
 
     Arena* = object
@@ -35,16 +37,18 @@ type
         tiles*: seq[TilePosition] = @[
             TilePosition(x: tileOnAxis div 2, y: tileOnAxis div 2)
         ]
-        onGraceFrame*, graceFrameAllowed*: bool
+        onGraceFrame*: bool
         direction*, nextDirection*: SnakeDirection = dirNone
 
 
 proc withSnake*(arena: Arena, snake: Snake): Arena =
     ## Arena with snake inside it (used for rendering)
     result = arena
-    for id, tile in snake.tiles:
+
+    # Reversed, so the snake head is drawn at the end (when self-nom-nom, it will still have a head):
+    for id, tile in snake.tiles.reversed():
         result.tiles[tile.x][tile.y] = (
-            if id != 0: tileSnakeBody
+            if id != snake.tiles.len() - 1: tileSnakeBody
             else: tileSnakeHead
         )
 
@@ -105,6 +109,7 @@ proc nextSnakePosition*(snake: Snake): TilePosition =
     return TilePosition(x: x, y: y)
 
 proc onGameOver*(snake: var Snake, arena: var Arena) =
+    ## Triggered on snake death
     updatePlayerHighscore()
     arena.isRunning = false
 
@@ -129,6 +134,7 @@ proc updateMovementIn*(snake: var Snake, arena: var Arena) =
     snake.tiles.insert(next, 0)
 
 proc getNextDirection(snake: Snake): SnakeDirection =
+    ## Gets the next direction for the snake
     var nextDirection: SnakeDirection = snake.direction
     proc keyboard[V](dir: SnakeDirection, buttons: array[V, KeyboardKey]) =
         for button in buttons:
@@ -140,6 +146,7 @@ proc getNextDirection(snake: Snake): SnakeDirection =
     return nextDirection
 
 proc controls*(snake: var Snake) =
+    ## Processes the controls for the snake
     let nextDirection: SnakeDirection = getNextDirection(snake)
     if nextDirection == dirNone: return
     var allowUpdate: bool = nextDirection != (
@@ -154,6 +161,7 @@ proc controls*(snake: var Snake) =
     if allowUpdate: snake.nextDirection = nextDirection
 
 proc update*(arena: var Arena, snake: var Snake) =
+    ## Updates the arena and snake
     snake.direction = snake.nextDirection
     snake.updateMovementIn(arena)
     snake.processNomNom(arena)
@@ -164,8 +172,8 @@ proc update*(arena: var Arena, snake: var Snake) =
 
 proc toPixelArea*(position: TilePosition): PixelArea =
     result = PixelArea(
-        x1: position.x * gridSize,
-        y1: position.y * gridSize + gridOffset
+        x1: position.x * gridSize + spaceOnSide,
+        y1: position.y * gridSize + gridOffset + spaceOnSide
     )
     result.x2 = result.x1 + gridSize
     result.y2 = result.y1 + gridSize

@@ -24,7 +24,7 @@ proc allowSnakeMove*(): bool =
 
 proc handlePlayerSpeedDifficulty*() =
     ## Updates `turnsPerSecond` based on score
-    let speed: uint = playerScore div 40 + 2
+    let speed: uint = playerScore div 50 + 2
     turnsPerSecond = speed
 
 
