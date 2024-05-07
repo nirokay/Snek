@@ -6,7 +6,7 @@ description   = "A basic snake game."
 license       = "GPL-3.0-only"
 srcDir        = "src"
 bin           = @["snek"]
-
+installExt    = @["png"]
 
 # Dependencies
 
