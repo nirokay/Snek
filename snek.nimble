@@ -6,6 +6,8 @@ description   = "A basic snake game."
 license       = "GPL-3.0-only"
 srcDir        = "src"
 bin           = @["snek"]
+
+# I do not know what i am doing:
 installExt    = @["png"]
 installDirs   = @["assets"]
 installFiles  = @["assets/icon.png"]
