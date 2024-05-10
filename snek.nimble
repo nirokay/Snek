@@ -7,6 +7,8 @@ license       = "GPL-3.0-only"
 srcDir        = "src"
 bin           = @["snek"]
 installExt    = @["png"]
+installDirs   = @["assets"]
+installFiles  = @["assets/icon.png"]
 
 # Dependencies
 

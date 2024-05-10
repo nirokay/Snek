@@ -1,4 +1,4 @@
-import std/[os]
+import std/[os, strutils]
 import raylib
 
 # =============================================================================
@@ -32,8 +32,8 @@ const
 # =============================================================================
 
 const
-    saveDirectory*: string = getDataDir() & "/nirokay/snek/"
-    saveFileHighscore*: string = saveDirectory & "highscore.dat"
+    saveDirectory*: string = getDataDir() / "nirokay" / gameName.toLower()
+    saveFileHighscore*: string = saveDirectory / "highscore.dat"
 
 # =============================================================================
 # Controls:
@@ -81,11 +81,28 @@ const
 # Images:
 # =============================================================================
 
-const imageRawIcon: string = readFile("assets/icon.png")
-let imageWindowIconLocation: string = saveDirectory & "icon.png"
+const imageRawIcon: string = block:
+    let locations: seq[string] = @[
+        "assets" / "icon.png",
+        "src" / "assets" / "icon.png"
+    ]
+    var validPath: string
+    for location in locations:
+        if not location.fileExists(): continue
+        validPath = location
+        break
+    if validPath == "":
+        ""
+    else:
+        readFile(validPath)
+
+let imageWindowIconLocation: string = saveDirectory / "icon.png"
 
 if not imageWindowIconLocation.fileExists():
-    imageWindowIconLocation.writeFile(imageRawIcon)
+    try:
+        imageWindowIconLocation.writeFile(imageRawIcon)
+    except CatchableError:
+        echo "Failed to write icon image to save directory"
 
 let imageWindowIcon*: Image = block:
     var result: Image = Image()
