@@ -1,4 +1,5 @@
 import raylib
+import utils
 
 type
     ColourPalette* = array[16, Color]
@@ -21,19 +22,6 @@ type
         colFgBrown,
         colFgRed,
         colFgPink,
-
-proc rgba*(r, g, b, a: byte): Color =
-    ## Shortcut for `Color(r: r, g: g, b: b, a: a)`
-    result = Color(
-        r: r,
-        g: g,
-        b: b,
-        a: a
-    )
-proc rgb*(r, g, b: byte): Color =
-    ## Shortcut for `Color(r: r, g: g, b: b, 255)`
-    result = rgba(r, g, b, 255)
-
 
 const colourPalette*: ColourPalette = [
     rgb(10, 10, 10), # Black

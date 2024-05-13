@@ -6,9 +6,9 @@ import raylib
 # =============================================================================
 
 const
-    gameName*: string = "Snek"
-    gameVersion*: string = "0.1.0"
-    gameAuthors*: seq[string] = @["nirokay"]
+    gameName*: string = "Snek" ## Game name (window name)
+    gameVersion*: string = "0.1.1" ## Game version (window name)
+    gameAuthors*: seq[string] = @["nirokay"] ## Game authors (NOT in window name)
 
 
 # =============================================================================
@@ -16,15 +16,15 @@ const
 # =============================================================================
 
 const
-    playFieldWidth*: int32 = 1024
-    playFieldHeight*: int32 = playFieldWidth
+    playFieldWidth*: int32 = 1024 ## Playing area width
+    playFieldHeight*: int32 = playFieldWidth ## Playing area height (same as width)
 
-    statusBarHeight*: int32 = 100
+    statusBarHeight*: int32 = 100 ## Height of the status bar at the top
 
-    screenWidth*: int32 = playFieldWidth
-    screenHeight*: int32 = playFieldHeight + statusBarHeight
+    screenWidth*: int32 = playFieldWidth ## Screen width
+    screenHeight*: int32 = playFieldHeight + statusBarHeight ## Screen height
 
-    targetFPS*: int32 = 60
+    targetFPS*: int32 = 60 ## Target fps (should not fuck with the update speed)
 
 
 # =============================================================================
@@ -32,8 +32,8 @@ const
 # =============================================================================
 
 let
-    saveDirectory*: string = getDataDir() / "nirokay" / gameName.toLower()
-    saveFileHighscore*: string = saveDirectory / "highscore.dat"
+    saveDirectory*: string = getDataDir() / "nirokay" / gameName.toLower() ## Game save directory, depends on the user OS
+    saveFileHighscore*: string = saveDirectory / "highscore.dat" ## Highscore save file
 
 # =============================================================================
 # Controls:
@@ -81,6 +81,7 @@ const
 # Images:
 # =============================================================================
 
+# Idk what the fuck I am doing here:
 const imageRawIcon: string = block:
     let locations: seq[string] = @[
         "assets" / "icon.png",
@@ -96,7 +97,7 @@ const imageRawIcon: string = block:
     else:
         readFile(validPath)
 
-let imageWindowIconLocation: string = saveDirectory / "icon.png"
+let imageWindowIconLocation: string = saveDirectory / "icon.png" ## Window icon location
 
 if not imageWindowIconLocation.fileExists():
     try:

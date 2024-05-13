@@ -2,8 +2,8 @@ import raylib
 import properties, globals, gamestate, palette, scores, utils
 
 var
-    arena: Arena
-    snake: Snake
+    arena: Arena ## Global `Arena` variable
+    snake: Snake ## Global `Snake` variable
 
 
 proc gameInit() =
@@ -57,6 +57,7 @@ proc gameUnload() =
     discard
 
 proc gameUpdateRender() =
+    ## Game update and render loop
     updateFrameCount()
     gameUpdate()
     gameRender()

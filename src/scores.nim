@@ -2,6 +2,7 @@ import std/[os, strutils]
 import globals, properties
 
 proc readHighScoreFromFile*() =
+    ## Reads the highscore file from the saves directory and attempts to parse it
     var
         rawContent: string = "0"
         highscore: int = 0
@@ -20,20 +21,23 @@ proc readHighScoreFromFile*() =
 
 
 proc initSaveDirectory*() =
+    ## Creates the save directory and the highscore file if they do not exist
     if not saveDirectory.dirExists():
         saveDirectory.createDir()
     if not saveFileHighscore.fileExists():
         saveFileHighscore.writeFile("0")
 
 proc incrementPlayerScore*() =
+    ## Adds to the player score and updates the highscore when a new one is reached
     playerScore += playerScoreIncrement
     if playerScore > playerHighscore:
         playerHighscore = playerScore
 
-proc writeHighscoreToFile*() =
+proc writeHighscoreToFile() =
+    ## Writes the highscore to the highscore file
     saveFileHighscore.writeFile($playerHighscore)
-
 proc updatePlayerHighscore*() =
+    ## Attempts to update the highscore file
     try:
         writeHighscoreToFile()
     except IOError as e:

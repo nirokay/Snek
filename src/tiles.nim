@@ -7,12 +7,15 @@ const tileResolution*: int = 16
 type DrawableTile* = array[32, seq[Rectangle]] ## Colour ID to sequence of rectangles
 
 proc newDrawableTile(): DrawableTile =
-    ## Gets a new drawable tile
+    ## Gets a new `DrawableTile`
+    # empty proc, amazing that Nim lets me do this
 
 proc add(tile: DrawableTile, id: ColourPaletteId, shapes: seq[Rectangle]): DrawableTile =
+    ## Sets a `seq[Rectangle]` to `DrawableTile.shapes`
     result = tile
     result[int id] = shapes
 proc add(tile: DrawableTile, id: ColourPaletteId, shapes: varargs[Rectangle]): DrawableTile =
+    ## Sets `varargs[Rectangle]` to `DrawableTile.shapes`
     result = add(tile, id, shapes.toSeq())
 
 proc rect*(x1, y1, x2, y2: int): Rectangle = Rectangle(
@@ -20,8 +23,7 @@ proc rect*(x1, y1, x2, y2: int): Rectangle = Rectangle(
     y: float y1,
     width: float(x2 - x1 + 1),
     height: float(y2 - y1 + 1)
-)
-
+) ## Shortcut for `Rectangle` using `int`s and using `x1`, `y1`, `x2` and `y2` notation for ease of use
 const
     textureBackground* = newDrawableTile()
         # Background tile:
@@ -95,6 +97,7 @@ const
         )
 
 proc drawTile*(targetResolution: int, x, y: int, tile: DrawableTile) =
+    ## Draws a `DrawableTile` to the screen with offsets calculated in
     let factor: float = float(targetResolution div tileResolution)
     for colourId, shapes in tile:
         for shape in shapes:
