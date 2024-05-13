@@ -59,29 +59,27 @@ proc getHeadPosition*(snake: Snake): TilePosition =
 proc spawnRandomFruit*(arena: var Arena, snake: Snake) =
     ## Picks a random field to spawn the next fruit, repeats until it finds an empty tile
     var
-        spawnAllowed: bool = false
-        x: int
-        y: int
         arenaWithSnake = arena.withSnake(snake)
-    block checkFreeSpace:
-        for row in arenaWithSnake.tiles:
-            if tileBackground in row:
-                break checkFreeSpace
-        echo "Lol"
+        availableSpaces: seq[TilePosition]
+
+    # Loop over every tile, add free tiles to `availableSpaces`, doubles as a
+    # check if every tile is occupied, which is, well... unlikely... however
+    # an impressive sign of dedication...
+    for rowId, row in arenaWithSnake.tiles:
+        for colId, tile in row:
+            if tile == tileBackground:
+                availableSpaces.add TilePosition(x: rowId, y: colId)
+
+    if unlikely availableSpaces.len() == 0:
+        echo "lol"
         return
 
-    while not spawnAllowed:
-        x = rand(TileNumberRange.high - 1)
-        y = rand(TileNumberRange.high - 1)
-
-        if arenaWithSnake.tiles[x][y] == tileBackground:
-            spawnAllowed = true
-
-    arena.food = TilePosition(x: x, y: y)
+    arena.food = availableSpaces[rand(availableSpaces.len() - 1)]
 
 proc processNomNom*(snake: var Snake, arena: var Arena) =
     ## Logic for eating and respawning fruit in arena
-    if snake.getHeadPosition() != arena.food: return
+    if likely snake.getHeadPosition() != arena.food:
+        return
     snake.tiles.add(snake.tiles[^1]) ## make long boi
     incrementPlayerScore()
     arena.spawnRandomFruit(snake)
