@@ -31,7 +31,7 @@ const
 # Files:
 # =============================================================================
 
-const
+let
     saveDirectory*: string = getDataDir() / "nirokay" / gameName.toLower()
     saveFileHighscore*: string = saveDirectory / "highscore.dat"
 
