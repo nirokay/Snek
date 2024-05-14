@@ -22,6 +22,7 @@ proc gameUpdate() =
     # Reset:
     if isKeyReleased(Escape): gameInit()
 
+    # Blocks input when snake is dead:
     if not arena.isRunning: return
 
     # Read snake controls:
