@@ -133,7 +133,7 @@ proc updateMovementIn*(snake: var Snake, arena: var Arena) =
 
 proc getNextDirection(snake: Snake): SnakeDirection =
     ## Gets the next direction for the snake
-    var nextDirection: SnakeDirection = snake.direction
+    var nextDirection: SnakeDirection = snake.nextDirection
     proc keyboard[V](dir: SnakeDirection, buttons: array[V, KeyboardKey]) =
         for button in buttons:
             if isKeyDown(button) or isKeyPressed(button) or isKeyPressedRepeat(button) or isKeyReleased(button): nextDirection = dir
