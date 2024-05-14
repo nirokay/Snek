@@ -29,7 +29,7 @@ type
         ## Playing area
         tiles*: array[tileOnAxis, array[tileOnAxis, Tile]] ## Visual tiles (for rendering)
         food*: TilePosition ## Food position
-        isRunning*: bool
+        isRunning*: bool ## Player alive + accept snake movement input
 
     SnakeDirection* = enum
         dirNone, dirUp, dirDown, dirLeft, dirRight
@@ -180,14 +180,10 @@ proc drawArenaTile(tile: Tile, position: TilePosition) =
     let pixelArea: PixelArea = position.toPixelArea()
     drawTile gridSize, pixelArea.x1, pixelArea.y1:
         case tile:
-        of tileBackground:
-            textureBackground
-        of tileSnakeBody:
-            textureSnakeBody
-        of tileSnakeHead:
-            textureSnakeHead
-        of tileFruit:
-            textureFruit
+        of tileBackground: textureBackground
+        of tileSnakeBody: textureSnakeBody
+        of tileSnakeHead: textureSnakeHead
+        of tileFruit: textureFruit
 
 proc drawArena*(arena: Arena) =
     ## Draws the entire arena to the screen

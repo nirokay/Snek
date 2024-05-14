@@ -18,7 +18,6 @@ proc gameInit() =
 proc gameUpdate() =
     ## Updates game logic
     updateFrameCount()
-    # stdout.write "\nFPS: " & $getFPS() & " | Last update: " & $lastUpdate & " | Frame-count: " & $frameCounter & "               "
 
     # Reset:
     if isKeyReleased(Escape): gameInit()
@@ -42,7 +41,7 @@ proc gameRender() =
         drawArena arena.withSnake(snake)
 
     block blockRenderGameOver:
-        if arena.isRunning:
+        if likely arena.isRunning:
             break blockRenderGameOver
         drawTextCentered(cstring "Game over :(", screenWidth div 2, 420 #[nice]#, fontSizeLarge, RayWhite)
         drawTextCentered(cstring "Press [Escape] to restart", screenWidth div 2, 600, fontSizeMedium, RayWhite)
@@ -62,7 +61,7 @@ proc gameUpdateRender() =
     gameUpdate()
     gameRender()
 
-proc main() =
+when isMainModule:
     ## Main proc with loop and error handling
     # Raylib stuff:
     initWindow(screenWidth, screenHeight, gameName & " v" & gameVersion)
@@ -84,15 +83,8 @@ proc main() =
                 gameUpdateRender()
         gameUnload()
 
-    # Error "handling":
-    #except CatchableError as e:
-    #    echo "Error panic: " & $e.name & "\n" & e.msg
-    #except Defect as e:
-    #    echo "Defect panic: " & $e.name & "\n" & e.msg
-
     # Close window:
     finally:
+        Info.traceLog "Gracefully exiting"
+        updatePlayerHighscore()
         closeWindow()
-
-when isMainModule:
-    main()
