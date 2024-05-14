@@ -16,15 +16,15 @@ const
 # =============================================================================
 
 const
-    playFieldWidth*: int32 = 1024 ## Playing area width
+    playFieldWidth* {.intdefine.}: int32 = 1024 ## Playing area width
     playFieldHeight*: int32 = playFieldWidth ## Playing area height (same as width)
 
-    statusBarHeight*: int32 = 100 ## Height of the status bar at the top
+    statusBarHeight* {.intdefine.}: int32 = 100 ## Height of the status bar at the top
 
     screenWidth*: int32 = playFieldWidth ## Screen width
     screenHeight*: int32 = playFieldHeight + statusBarHeight ## Screen height
 
-    targetFPS*: int32 = 60 ## Target fps (should not fuck with the update speed)
+    targetFPS* {.intdefine.}: int32 = 60 ## Target fps (should not fuck with the update speed)
 
 
 # =============================================================================
