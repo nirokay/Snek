@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "packages": {
+    "naylib": {
+      "version": "24.49.0",
+      "vcsRevision": "b5ebb0833d00232c0b56b5485b47ad8884664c79",
+      "url": "https://github.com/planetis-m/naylib",
+      "downloadMethod": "git",
+      "dependencies": [],
+      "checksums": {
+        "sha1": "8cc6fef3331be4335df3855a2c4560a0d7dd6044"
+      }
+    }
+  },
+  "tasks": {}
+}

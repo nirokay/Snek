@@ -7,7 +7,7 @@ import raylib
 
 const
     gameName*: string = "Snek" ## Game name (window name)
-    gameVersion*: string = "1.0.0" ## Game version (window name)
+    gameVersion*: string = "1.0.1" ## Game version (window name)
     gameAuthors*: seq[string] = @["nirokay"] ## Game authors (NOT in window name)
 
 
