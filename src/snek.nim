@@ -44,12 +44,12 @@ proc gameRender() =
     block blockRenderGameOver:
         if likely arena.isRunning:
             break blockRenderGameOver
-        drawTextCentered(cstring "Game over :(", screenWidth div 2, 420 #[nice]#, fontSizeLarge, RayWhite)
-        drawTextCentered(cstring "Press [Escape] to restart", screenWidth div 2, 600, fontSizeMedium, RayWhite)
+        drawTextCentered("Game over :(", screenWidth div 2, 420 #[nice]#, fontSizeLarge, RayWhite)
+        drawTextCentered("Press [Escape] to restart", screenWidth div 2, 600, fontSizeMedium, RayWhite)
 
     block blockRenderUI:
-        drawTextCentered(cstring "Score: " & $playerScore, screenWidth div 4, 25, fontSizeScoreBoard, RayWhite)
-        drawTextCentered(cstring "Highscore: " & $playerHighScore, screenWidth div 4 + screenWidth div 2, 25, fontSizeScoreBoard, RayWhite)
+        drawTextCentered("Score: " & $playerScore, screenWidth div 4, 25, fontSizeScoreBoard, RayWhite)
+        drawTextCentered("Highscore: " & $playerHighScore, screenWidth div 4 + screenWidth div 2, 25, fontSizeScoreBoard, RayWhite)
     endDrawing()
 
 proc gameUnload() =
